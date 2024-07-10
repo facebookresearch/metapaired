@@ -436,8 +436,7 @@ def icumulative(q, r, s, t, u, covariates, majorticks, minorticks,
     plt.xlabel(
         '$j/m$ (together with minor ticks at equispaced values of $A_j$)')
     ax2.tick_params(which='minor', axis='x', top=True, direction='in', pad=-17)
-    ax2.set_xticks(np.arange(0, 1 + 1 / majorticks, 1 / majorticks),
-                   minor=True)
+    ax2.set_xticks(np.arange(1 / majorticks, 1, 1 / majorticks), minor=True)
     ks = ['{:.2f}'.format(a) for a in
           np.arange(0, 1 + 1 / majorticks, 1 / majorticks).tolist()]
     alist = (lenxf - 1) * np.arange(0, 1 + 1 / majorticks, 1 / majorticks)
