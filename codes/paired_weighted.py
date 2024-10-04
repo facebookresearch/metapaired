@@ -205,7 +205,9 @@ def cumulative(q, r, s, majorticks, minorticks, filename='cumulative.pdf',
     lenxf = int(len(x) * fraction)
     sl = ['{:.2f}'.format(a) for a in
           np.insert(s, 0, [0])[:lenxf:(lenxf // majorticks)].tolist()]
-    plt.xticks(x[:lenxf:(lenxf // majorticks)], sl)
+    plt.xticks(
+        x[:lenxf:(lenxf // majorticks)], sl,
+        bbox=dict(boxstyle='Round', fc='w'))
     if len(rsub) >= 300 and minorticks >= 50:
         # Indicate the distribution of s via unlabeled minor ticks.
         plt.minorticks_on()
@@ -214,11 +216,12 @@ def cumulative(q, r, s, majorticks, minorticks, filename='cumulative.pdf',
         ax.set_xticks(x[np.cumsum(histcounts(minorticks,
                       s[:int((len(x) - 1) * fraction)]))], minor=True)
     # Label the axes.
-    plt.xlabel('$S_j$')
+    plt.xlabel('$S_j$', labelpad=6)
     plt.ylabel('$C_j$')
     ax2 = plt.twiny()
     plt.xlabel(
-        '$j/m$ (together with minor ticks at equispaced values of $A_j$)')
+        '$j/m$ (together with minor ticks at equispaced values of $A_j$)',
+        labelpad=8)
     ax2.tick_params(which='minor', axis='x', top=True, direction='in', pad=-17)
     ax2.set_xticks(np.arange(1 / majorticks, 1, 1 / majorticks), minor=True)
     ks = ['{:.2f}'.format(a) for a in
@@ -233,7 +236,7 @@ def cumulative(q, r, s, majorticks, minorticks, filename='cumulative.pdf',
             alabs.append(x[int(a)])
         else:
             alabs.append(x[int(a)] * (1 + 1e-3))
-    plt.xticks(alabs, ks)
+    plt.xticks(alabs, ks, bbox=dict(boxstyle='Round', fc='w'))
     ax2.xaxis.set_minor_formatter(FixedFormatter(
         [r'$A_j\!=\!{:.2f}$'.format(1 / majorticks)]
         + [r'${:.2f}$'.format(k / majorticks) for k in range(2, majorticks)]))
@@ -421,7 +424,9 @@ def icumulative(q, r, s, t, u, covariates, majorticks, minorticks,
     lenxf = int(len(x) * fraction)
     sl = ['{:.2f}'.format(a) for a in
           np.insert(s, 0, [0])[:lenxf:(lenxf // majorticks)].tolist()]
-    plt.xticks(x[:lenxf:(lenxf // majorticks)], sl)
+    plt.xticks(
+        x[:lenxf:(lenxf // majorticks)], sl,
+        bbox=dict(boxstyle='Round', fc='w'))
     if len(rsub) >= 300 and minorticks >= 50:
         # Indicate the distribution of s via unlabeled minor ticks.
         plt.minorticks_on()
@@ -430,11 +435,12 @@ def icumulative(q, r, s, t, u, covariates, majorticks, minorticks,
         ax.set_xticks(x[np.cumsum(histcounts(minorticks,
                       s[:int((len(x) - 1) * fraction)]))], minor=True)
     # Label the axes.
-    plt.xlabel('$S_j$')
+    plt.xlabel('$S_j$', labelpad=6)
     plt.ylabel('$C_j$')
     ax2 = plt.twiny()
     plt.xlabel(
-        '$j/m$ (together with minor ticks at equispaced values of $A_j$)')
+        '$j/m$ (together with minor ticks at equispaced values of $A_j$)',
+        labelpad=8)
     ax2.tick_params(which='minor', axis='x', top=True, direction='in', pad=-17)
     ax2.set_xticks(np.arange(1 / majorticks, 1, 1 / majorticks), minor=True)
     ks = ['{:.2f}'.format(a) for a in
@@ -449,7 +455,7 @@ def icumulative(q, r, s, t, u, covariates, majorticks, minorticks,
             alabs.append(x[int(a)])
         else:
             alabs.append(x[int(a)] * (1 - 1e-4))
-    plt.xticks(alabs, ks)
+    plt.xticks(alabs, ks, bbox=dict(boxstyle='Round', fc='w'))
     ax2.xaxis.set_minor_formatter(FixedFormatter(
         [r'$A_j\!=\!{:.2f}$'.format(1 / majorticks)]
         + [r'${:.2f}$'.format(k / majorticks) for k in range(2, majorticks)]))
@@ -562,7 +568,7 @@ def equiscores(q, r, s, nbins, filename='equiscore.pdf', weights=None,
     plt.close()
 
 
-def equierrs(q, r, s, nbins, filename='equibins.pdf', weights=None,
+def equierrs(q, r, s, nbins, rng, filename='equibins.pdf', weights=None,
              top=None, left=None, right=None):
     """
     Reliability diagram with similar ratio L2-norm / L1-norm of weights by bin
@@ -582,6 +588,8 @@ def equierrs(q, r, s, nbins, filename='equibins.pdf', weights=None,
         scores (must be in non-decreasing order)
     nbins : int
         rough number of bins to construct
+    rng : Generator
+        fully initialized random number generator from NumPy
     filename : string, optional
         name of the file in which to save the plot
     weights : array_like, optional
@@ -621,7 +629,7 @@ def equierrs(q, r, s, nbins, filename='equibins.pdf', weights=None,
         # of the L2 norm of w in the bin to the L1 norm of w in the bin,
         # returning the indices defining the bins in the list inbin.
         proxy = len(w) // nbins
-        v = w[np.sort(np.random.permutation(len(w))[:proxy])]
+        v = w[np.sort(rng.permutation(len(w))[:proxy])]
         # t is a heuristic threshold.
         t = np.square(v).sum() / v.sum()**2
         inbin = []
@@ -884,8 +892,9 @@ if __name__ == '__main__':
                 equiscores(q, r, s, nbins, filename, weights, top=1, left=0,
                            right=1)
                 filename = dir + 'equierrs.pdf'
-                equierrs(
-                    q, r, s, nbins, filename, weights, top=1, left=0, right=1)
+                rng = default_rng(seed=987654321)
+                equierrs(q, r, s, nbins, rng, filename, weights, top=1, left=0,
+                         right=1)
                 filepdf = dir + 'exact.pdf'
                 filejpg = dir + 'exact.jpg'
                 exactplot(qexact, rexact, s, filepdf, top=1, left=0, right=1)
