@@ -363,7 +363,8 @@ for control in controls:
             filename = dir + 'equiscores' + str(nbins) + '.pdf'
             paired_weighted.equiscores(r1, r0, s, nbins, filename)
             filename = dir + 'equierrs' + str(nbins) + '.pdf'
-            paired_weighted.equierrs(r1, r0, s, nbins, filename)
+            rng2 = default_rng(seed=987654321)
+            paired_weighted.equierrs(r1, r0, s, nbins, rng2, filename)
 if not clargs.interactive:
     print()
     print('waiting for conversion from pdf to jpg to finish....')

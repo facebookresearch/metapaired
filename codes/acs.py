@@ -369,9 +369,10 @@ for county in counties:
                 r[0][inds], r[1][inds], s[inds], nbins, filename=filename,
                 weights=w[inds], left=0)
             filename = dir + 'equierrs' + str(nbins) + '.pdf'
+            rng2 = default_rng(seed=987654321)
             nout[str(nbins)] = paired_weighted.equierrs(
-                r[0][inds], r[1][inds], s[inds], nbins, filename=filename,
-                weights=w[inds])
+                r[0][inds], r[1][inds], s[inds], nbins, rng2,
+                filename=filename, weights=w[inds])
         majorticks = 10
         minorticks = 300
         filename = dir + 'cumulative.pdf'
