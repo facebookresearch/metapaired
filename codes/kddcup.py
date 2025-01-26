@@ -118,7 +118,7 @@ with open(filename, 'r') as f:
                         # Convert a floating-point number to a float.
                         data.append(float(s))
                     except ValueError:
-                        if(s[-1] == '-'):
+                        if s[-1] == '-':
                             # The zipcode includes an extra hyphen ... omit it.
                             data.append(int(s[:-1]))
                         else:

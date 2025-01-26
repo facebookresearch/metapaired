@@ -225,8 +225,8 @@ def cumulative(q, r, s, majorticks, minorticks, filename='cumulative.pdf',
     ax2.tick_params(which='minor', axis='x', top=True, direction='in', pad=-17)
     ax2.set_xticks(np.arange(1 / majorticks, 1, 1 / majorticks), minor=True)
     ks = ['{:.2f}'.format(a) for a in
-          np.arange(0, 1 + 1 / majorticks, 1 / majorticks).tolist()]
-    alist = (lenxf - 1) * np.arange(0, 1 + 1 / majorticks, 1 / majorticks)
+          np.arange(0, 1 + 1 / majorticks / 2, 1 / majorticks).tolist()]
+    alist = (lenxf - 1) * np.arange(0, 1 + 1 / majorticks / 2, 1 / majorticks)
     alist = alist.tolist()
     # Jitter minor ticks that overlap with major ticks lest Pyplot omit them.
     alabs = []
@@ -328,8 +328,8 @@ def icumulative(q, r, s, t, u, covariates, majorticks, minorticks,
             bottomtxt = '\n'
             for j in range(len(covariates)):
                 toptxt += covariates[j]
-                if(np.allclose(
-                        np.round(u[k, j]), u[k, j], rtol=1e-5)):
+                if np.allclose(
+                        np.round(u[k, j]), u[k, j], rtol=1e-5):
                     toptxt += ' = {}'.format(round(u[k, j]))
                 else:
                     toptxt += ' = {:.2f}'.format(u[k, j])
@@ -444,8 +444,8 @@ def icumulative(q, r, s, t, u, covariates, majorticks, minorticks,
     ax2.tick_params(which='minor', axis='x', top=True, direction='in', pad=-17)
     ax2.set_xticks(np.arange(1 / majorticks, 1, 1 / majorticks), minor=True)
     ks = ['{:.2f}'.format(a) for a in
-          np.arange(0, 1 + 1 / majorticks, 1 / majorticks).tolist()]
-    alist = (lenxf - 1) * np.arange(0, 1 + 1 / majorticks, 1 / majorticks)
+          np.arange(0, 1 + 1 / majorticks / 2, 1 / majorticks).tolist()]
+    alist = (lenxf - 1) * np.arange(0, 1 + 1 / majorticks / 2, 1 / majorticks)
     alist = alist.tolist()
     # Jitter minor ticks that overlap with major ticks lest Pyplot omit them.
     alabs = []
