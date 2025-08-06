@@ -533,9 +533,9 @@ def equiscores(q, r, s, nbins, filename='equiscore.pdf', weights=None,
             wbin[j] += w[k]
         # Normalize the sum for each bin to compute the arithmetic average.
         bina = np.divide(bina, wbin, where=wbin != 0)
-        bina[np.where(wbin == 0)] = np.nan
+        bina[wbin == 0] = np.nan
         binb = np.divide(binb, wbin, where=wbin != 0)
-        binb[np.where(wbin == 0)] = np.nan
+        binb[wbin == 0] = np.nan
         return wbin, bina, binb
 
     assert all(s[k] <= s[k + 1] for k in range(len(s) - 1))
@@ -619,9 +619,9 @@ def equierrs(q, r, s, nbins, rng, filename='equibins.pdf', weights=None,
                 for k in range(len(inbin) - 1)]
         # Normalize the sum for each bin to compute the weighted average.
         bina = np.divide(bina, wbin, where=wbin != 0)
-        bina[np.where(wbin == 0)] = np.nan
+        bina[wbin == 0] = np.nan
         binb = np.divide(binb, wbin, where=wbin != 0)
-        binb[np.where(wbin == 0)] = np.nan
+        binb[wbin == 0] = np.nan
         return wbin, bina, binb
 
     def binbounds(nbins, w):
